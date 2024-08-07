@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     // })
 
                 })
-                res.status(200).json({ message: "The request has been processed" })
+                res.status(200).json({ message: "The request has been processed", databases: trackingDatabasesIds })
             } catch (e) {
                 res.status(500).json({ message: "Something has gone wrong when retrieving the apps", error: e })
             }
