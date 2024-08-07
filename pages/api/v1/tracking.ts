@@ -12,7 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // Retrieve array of tracking databases
                 const trackingDatabasesIds = retrieveTrackingDatabasesIds()
 
-                keywordDatabasesIds.forEach(async (keywordsDatabaseId, index) => {
+                for (let i = 0; i < keywordDatabasesIds.length; i++) {
+                    const keywordsDatabaseId = keywordDatabasesIds[i];
+
                     // Fetch the default keywords of the database
                     const data = await fetchNotionDatabase(keywordsDatabaseId)
 
@@ -23,11 +25,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const position = await scrapeScriptsWithNonce(keyword, language)
 
                     // Update the tracking database with the new position of the keyword
-                    await updateNotionDatabase(keyword, position, item.Language, trackingDatabasesIds[index])
-                    // })
+                    const result = await updateNotionDatabase(keyword, position, item.Language, trackingDatabasesIds[i])
 
-                })
-                res.status(200).json({ message: "The request has been processed", databases: trackingDatabasesIds })
+                    return res.status(200).json({ message: "The request has been processed", result: result })
+                }
+                res.status(500).json({ message: "Something went wrong" })
             } catch (e) {
                 res.status(500).json({ message: "Something has gone wrong when retrieving the apps", error: e })
             }
