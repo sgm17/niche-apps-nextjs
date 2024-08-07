@@ -25,11 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const position = await scrapeScriptsWithNonce(keyword, language)
 
                     // Update the tracking database with the new position of the keyword
-                    const result = await updateNotionDatabase(keyword, position, item.Language, trackingDatabasesIds[i])
-
-                    return res.status(200).json({ message: "The request has been processed", result: result })
+                    await updateNotionDatabase(keyword, position, item.Language, trackingDatabasesIds[i])
                 }
-                res.status(500).json({ message: "Something went wrong" })
+                res.status(200).json({ message: "The request has been processed" })
             } catch (e) {
                 res.status(500).json({ message: "Something has gone wrong when retrieving the apps", error: e })
             }
