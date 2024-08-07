@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 // Function to scrape the web page and find <script> tags with nonce attribute
-export async function scrapeScriptsWithNonce(keyword: string, language: string): Promise<Number> {
+export async function scrapeScriptsWithNonce(keyword: string, language: string): Promise<number> {
     try {
         // Get the developer account
         const creator = process.env.DEVELOPER_NAME

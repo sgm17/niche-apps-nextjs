@@ -8,8 +8,8 @@ export interface KeywordLanguageObject {
     Language: string
 }
 
-export const updateNotionDatabase = async (keyword, position, language, databaseId: string): Promise<void> => {
-    const query = {
+export const updateNotionDatabase = async (keyword: string, position: number, language: string, databaseId: string): Promise<void> => {
+    const body = {
         parent: {
             type: "database_id",
             database_id: databaseId
@@ -38,6 +38,8 @@ export const updateNotionDatabase = async (keyword, position, language, database
         }
     }
 
+    console.log(body)
+
     const options = {
         method: 'POST',
         headers: {
@@ -46,14 +48,12 @@ export const updateNotionDatabase = async (keyword, position, language, database
             'content-type': 'application/json',
             'Authorization': 'Bearer ' + process.env.NOTION_API_KEY,
         },
-        body: JSON.stringify(query),
+        body: JSON.stringify(body),
     };
 
-    try {
-        await fetch('https://api.notion.com/v1/pages', options)
-    } catch (error) {
-        console.log(error)
-    }
+    const response = await fetch('https://api.notion.com/v1/pages', options)
+    const json = await response.json()
+    // console.log(json)
 }
 
 export const fetchNotionDatabase = async (databaseId: string): Promise<KeywordLanguageObject[]> => {

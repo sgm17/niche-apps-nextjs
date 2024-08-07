@@ -16,15 +16,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     // Fetch the default keywords of the database
                     const data = await fetchNotionDatabase(keywordsDatabaseId)
 
-                    data.forEach(async (item) => {
+                    const item = data[0]
+                    // data.forEach(async (item) => {
+                    const keyword = item.Keyword
+                    const language = item.Language === "en" ? "en_US" : "es_ES"
+                    const position = await scrapeScriptsWithNonce(keyword, language)
 
-                        const keyword = item.Keyword
-                        const language = item.Language === "en" ? "en_US" : "es_ES"
-                        const position = await scrapeScriptsWithNonce(keyword, language)
-
-                        // Update the tracking database with the new position of the keyword
-                        await updateNotionDatabase(keyword, position, item.Language, trackingDatabasesIds[index])
-                    })
+                    // Update the tracking database with the new position of the keyword
+                    await updateNotionDatabase(keyword, position, item.Language, trackingDatabasesIds[index])
+                    // })
 
                 })
                 res.status(200).json({ message: "The request has been processed" })
